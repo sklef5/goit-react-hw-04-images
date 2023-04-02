@@ -14,34 +14,41 @@ export class Gallery extends Component {
     page: 1,
     isLoading: false,
     bigImgUrl: null,
+    buttonOn: false,
+    query:'',
   };
+  
+  static getDerivedStateFromProps(props, state) {
+    if (state.query !== props.query) {
+      return { page: 1, query: props.query };
+    };
+    return null;
+};
 
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { page } = this.state;
-    if (prevProps.setquery !== this.props.setquery) {   
-      this.setState({array :[]}) 
+    if (prevProps.query !== this.props.query ) {
+      this.setState({array: []})
       this.getPage();
     }
     if (prevState.page !== page && page !== 1) {
       this.getPage();
     }
   }
-  errorMes() {
-    Notiflix.Report.failure('No pictures');
-  }
 
   getPage = async () => {
-    const { setquery } = this.props;
+    const { query } = this.props;
     const { page } = this.state;
     this.setState({ isLoading: true });
-
-    console.log(this.state.array)
     try {
-      const data = await fetchImg(setquery, page);
+      const data = await fetchImg(query, page);
       if (data.hits.length === 0) {
-        this.setState({array :[]})
+        this.setState({ array: [] });
         this.errorMes();
       }
+
+      data.hits.length === 12?this.setState({buttonOn: true}):this.setState({buttonOn: false})
+
       this.setState(prev => ({
         array: page === 1 ? data.hits : [...prev.array, ...data.hits],
       }));
@@ -56,6 +63,10 @@ export class Gallery extends Component {
     this.setState(prev => ({ page: prev.page + 1 }));
   };
 
+  errorMes() {
+    Notiflix.Report.failure('No pictures');
+  }
+
   openModal = modaldata => {
     this.setState({ bigImgUrl: modaldata });
   };
@@ -65,7 +76,7 @@ export class Gallery extends Component {
   };
 
   render() {
-    const { array, isLoading, bigImgUrl } = this.state;
+    const { array, isLoading, bigImgUrl, buttonOn } = this.state;
 
     return (
       <>
@@ -82,7 +93,7 @@ export class Gallery extends Component {
             ))}
         </GalleryList>
         {isLoading && <Loader />}
-        {array.length > 0 && <ButtonMore onClick={this.changePage} />}
+        {buttonOn && <ButtonMore onClick={this.changePage} />}
         {bigImgUrl && (
           <ModalBlock onClick={bigImgUrl} closeModal={this.closeModal} />
         )}

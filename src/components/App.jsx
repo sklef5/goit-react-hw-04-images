@@ -19,7 +19,7 @@ export class App extends Component {
     return (
       <AppStyled>
         <Form queryInput={this.formHandler} />
-        <Gallery  setquery = {this.state.query}/>
+        <Gallery  query = {this.state.query}/>
       </AppStyled>
     );
   }

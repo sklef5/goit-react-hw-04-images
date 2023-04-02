@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://pixabay.com/api';
+const BASE_URL = 'https://pixabay.com/api/';
 const API = '34264308-22057ffdb03c712e66af4a89b';
 const TYPE = 'photo';
 const FOR_PAGINATION = '12';
