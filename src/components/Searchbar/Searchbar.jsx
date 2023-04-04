@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -8,31 +8,27 @@ import {
   SubmitBtn,
   Span,
 } from './SearchBar.styled';
-// import PropTypes from 'prop-types';
 
-export class Form extends Component {
-  state = {
-    value: '',
-  };
-
-  handleSubmit = e => {
+export const Form =({queryInput})=> {
+ const [request, setRequest] = useState('')
+  
+  const handleSubmit = e => {
     e.preventDefault();
-    if (this.state.value.trim()===''){
+    if (request.trim()===''){
         alert('input data')
         return
     }
-    this.props.queryInput(this.state.value);
-    this.setState({value:''})
+    queryInput(request);
+    setRequest('')
   };
 
-  handleChange = e => {
-    this.setState({ value: e.target.value.toLowerCase() });
+  const handleChange = e => {
+    setRequest(e.target.value.toLowerCase())
   };
 
-  render() {
     return (
       <SearchBar>
-        <SearchForm onSubmit={this.handleSubmit}>
+        <SearchForm onSubmit={handleSubmit}>
           <SubmitBtn type="submit" />
           <Span>Search</Span>
           <Input
@@ -41,13 +37,12 @@ export class Form extends Component {
             autocomplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.value}
-            onChange={this.handleChange}
+            value={request}
+            onChange={handleChange}
           />
         </SearchForm>
       </SearchBar>
     );
-  }
 }
 
 Form.propTypes={

@@ -1,29 +1,24 @@
-import { Form } from '../components/Searchbar/Searchbar';
+import  {Form}  from '../components/Searchbar/Searchbar';
 import { AppStyled } from './App.styled';
-import { Component } from 'react';
+import { useState } from 'react';
 import { Gallery } from '../components/ImageGallery/ImageGallery';
 import PropTypes from 'prop-types';
 
-export class App extends Component {
+export const App =()=> {
+  const [query, setQuery] = useState('')
 
-
-  state = {
-    query: '',
+  const formHandler = (data) => {
+    setQuery(data );
   };
 
-  formHandler = data => {
-    this.setState({ query: data });
-  };
-
-  render() {
     return (
       <AppStyled>
-        <Form queryInput={this.formHandler} />
-        <Gallery  query = {this.state.query}/>
+        <Form queryInput={formHandler} />
+        <Gallery  query = {query}/>
       </AppStyled>
     );
   }
-}
+
 App.propTypes = {
   query: PropTypes.string
 }
